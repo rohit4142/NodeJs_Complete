@@ -64,9 +64,31 @@ const main = async()=>{
     //console.log(task.author)
 
     //but in reality we need all tasks by a user
-    const user=await User.findById('634bb449e13200fdeba7fb78')
-    await user.populate('tasks')
-    console.log(user.tasks)
+    // const user=await User.findById('634bb449e13200fdeba7fb78')
+    // await user.populate('tasks')
+    // console.log(user.tasks)
 }
 main()
 
+//file upload
+const multer = require('multer')
+//creating middleware fun to handle file upload
+const upload = multer({
+    dest: 'images', //folder where we want to save the uploaded file
+    limits: {       //setting up the limits on uploaded file
+        fileSize: 1000000
+    },  
+    //fileFilter	Function to control which files are accepted
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(doc|docx)$/)) { //here we are accepting only doc/docx file
+            return cb(new Error('Please upload a Word document'))
+        }
+
+        cb(undefined, true)
+    }
+})
+app.post('/upload', upload.single('upload'), (req, res) => {
+    res.send()
+}, (error, req, res, next) => { //this will be expression to handle express error and send json response
+    res.status(400).send({ error: error.message })
+})

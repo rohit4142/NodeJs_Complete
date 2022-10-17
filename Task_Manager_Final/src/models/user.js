@@ -3,6 +3,7 @@ const validator=require('validator')
 const bcrypt =require('bcryptjs')
 const jwt=require('jsonwebtoken')
 const Task=require('./task')
+const { Timestamp } = require('mongodb')
 
 
 //creating a schema so that we can use middlewares : Middleware (also called pre and post hooks) are functions which are passed control during execution of asynchronous functions.Mongoose has 4 types of middleware: document middleware, model middleware, aggregate middleware, and query middleware.
@@ -47,13 +48,17 @@ email:{
         }
     }
 },
+avatar: {
+    type: Buffer
+},
 tokens:[{
     token:{
         type:String,
         required: true
     }
-}]
-
+}],
+}, {
+    timestamps: true
 })
 
 //In Mongoose, a virtual is a property that is not stored in MongoDB. Virtuals are typically used for computed properties on documents.
